@@ -96,6 +96,28 @@ El servidor identifica los segmentos de distintos clientes usando la dirección 
 
 _Si el cliente y servidor usan HTTP persistente, entonces durante la conexión el cliente y el servidor intercambiarán los mensajes HTTP en el mismo socket en el cual se inicio, o sea, se mantienen los sockets originales. En el caso de conexiones no persistentes, una nueva conexión TCP es creada por cada solicitud/respuesta, ergo, un nuevo socket es creado y luego cerrado por cada solicitud/respuesta_
 
-## UDP: Transporte sin conexión
+## UDP: Transporte sin conexión ([RFC 768](https://tools.ietf.org/html/rfc768))
 
 Sabemos actualmente que en orden de trasnportar datos entre aplicaciones y la capa de red en una manera correcta debemos proveer **multiplexing/demultiplexing**
+
+UDP como protocolo de transporte hace lo mínimo posible que puede hacer. Además de proveer multiplexing/demultiplexing y un ligero chequeo de errores (Cheksum que se genera con la infoprmación del header) no agrega nada mas al protocolo IP
+
+El funcionamiento es el siguiente:
+
+1.- Toma el mensaje de la aplicación, añade los puertos de origen y destino, además agrega dos valores adicionales (largo y checksum)
+
+2.- El resultado es enviado a la capa de red, esta encapsula el segmento en un datagrama IP y hace su mejor esfuerzo al intentar enviar el segmento a su destino
+
+3.- Si el segmento llega al destino, UDP usa el número de puerto de destino para entregar el segmento a la aplicación correspondiente
+
+_Notar que UDP no genera un handshaking entre hosts en la capa de transporte antes de enviar el segmento. Por esto decimos que UDP es un protocolo connectionless_
+
+### Cuando elegir UDP sobre TCP
+
+**Mayor control al nivel de aplicación sobre que datos son enviados y cuando**: Debido a que UDP no tiene la complejidad de TCP ni mecanismos de congestión al enviar un paquete por UDP este es enviado inmediatamente a la capa de red
+
+**No hay necesidad de establecer una conexión**: UDP no tiene un delay al establecer una conexión, al contrario con TCP que tiene un handshake de tres vías antes de enviar datos
+
+**No hay estado de la conexión**: TCP mantiene el estado de la conexión en los end systems, por otra parte, UDP no lo hace podiendo mantener una mayor cantidad clientes al correr una aplicación en comparación con TCP
+
+**Overhead por cabeceras en paquetes pequeños**: TCP tiene un encabezado de 20 bytes, versus UDP que tan solo tiene 8 bytes
