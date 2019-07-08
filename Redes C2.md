@@ -1,4 +1,4 @@
-# Ch.3 Transport Layer
+# Ch.3 Capa de Transporte
 
 - **Reside entre las capas de aplicaciones y redes**
 - Provee servicios de comunicación directamente a las aplicaciones en ejecución en distintos hosts
@@ -66,7 +66,7 @@ Los campos que nombremos anteriormente son el **número de puerto de destino** y
 
 _Los primeros 1024 números estan restringidos para servicios conocidos (HTTP por ejemplo usa el 80 y Telnet el 23), la lista esta en el [RFC 1700](https://tools.ietf.org/html/rfc1700) y ha sido actualizada en el [RFC 3232](https://tools.ietf.org/html/rfc3232)_
 
-### Multiplexing y demultiplexing en UDP
+### **Multiplexing y demultiplexing en UDP**
 
 >clientSocket = socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -78,7 +78,7 @@ Cuando un socket es creado la capa de transporte inmediatamente asigna un puerto
 
 _Importante denotar que un socket UDP es identificado totalmente con la tupla IP-Puerto_
 
-### Multiplexing y demultiplexing en TCP
+### **Multiplexing y demultiplexing en TCP**
 
 Primero debemos notar la diferencia con UDP, esta se basa inicialmente en como se identifica un socket TCP, el cual se caracteriza por una tupla con 4 elementos (IP origen, puerto origen, IP destino, puerto destino)
 
@@ -87,3 +87,5 @@ En el caso que un segmento TCP llega a destino, este usa los cuatro campos para 
 _Un caso particular (en contraste con UDP) es cuando dos segmentos TCP llegan con diferentes IPs de origen o numeros puertos serán dirigidos por dos sockets distintos_
 
 ## Servidores web y TCP
+
+
