@@ -88,4 +88,14 @@ _Un caso particular (en contraste con UDP) es cuando dos segmentos TCP llegan co
 
 ## Servidores web y TCP
 
+_Usualmente un servidor web usa el puerto 80 para comunicarse (este es un puerto reservado vease [RFC 3232](https://tools.ietf.org/html/rfc3232))_
 
+Cuando un cliente (por ejemplo, un navegador) envía segmentos al servidor, **todos los segmentos** tendrán como destino el puerto 80. En particular, el segmento de establecimiento de la conexión y el segmento que contiene la solicitud HTTP tendrán como destino el puerto 80
+
+El servidor identifica los segmentos de distintos clientes usando la dirección IP y puerto en la cabecera del segmento recibido
+
+_Si el cliente y servidor usan HTTP persistente, entonces durante la conexión el cliente y el servidor intercambiarán los mensajes HTTP en el mismo socket en el cual se inicio, o sea, se mantienen los sockets originales. En el caso de conexiones no persistentes, una nueva conexión TCP es creada por cada solicitud/respuesta, ergo, un nuevo socket es creado y luego cerrado por cada solicitud/respuesta_
+
+## UDP: Transporte sin conexión
+
+Sabemos actualmente que en orden de trasnportar datos entre aplicaciones y la capa de red en una manera correcta debemos proveer **multiplexing/demultiplexing**
