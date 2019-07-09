@@ -121,3 +121,47 @@ _Notar que UDP no genera un handshaking entre hosts en la capa de transporte ant
 **No hay estado de la conexión**: TCP mantiene el estado de la conexión en los end systems, por otra parte, UDP no lo hace podiendo mantener una mayor cantidad clientes al correr una aplicación en comparación con TCP
 
 **Overhead por cabeceras en paquetes pequeños**: TCP tiene un encabezado de 20 bytes, versus UDP que tan solo tiene 8 bytes
+
+### Estructura UDP
+
+La cabecera tiene sólo cuatro campos, cada uno de dos bytes. Dos corresponden a los puertos de origen y destino, un campo que contiene la cantidad de bytes del segmento (incluyendo la cabecera) y un campo con el checksum de las cabeceras que sirve para ña comprobación de errores (su cálculo se verá más adelante)
+
+#### UDP Checksum ([RFC 1071](https://tools.ietf.org/html/rfc1071))
+
+Este cálculo provee detectar errores en el envío de segmentos via UDP. Esto se logra en el lado del que recibe el segmento al sumar todas las palabras de 16 bits en el segmento con complemento a uno
+
+_Notar que esta suma tiene overflow, si la suma nos da 1111111111111111, el paquete no contiene errorres, si contiene al menos un cero el paquete no es correcto en su contenido_
+
+Debemos notar que UDP solo nos da información si tenemos un error, pero no nos dice como recuperarnos del error
+
+## Principios de transferencia de datos confiables
+
+**Con un canal confiable de trnasferencia de datos, no hay pérdidas o corrupción en los datos enviados**
+
+_Notar que una capa puede ser confiable en el envío de datos pero otras no necesariamente, por ejemplo tomar TCP en la capa de transporte es un protocolo confiable, pero puede estar implementado sobre IP (técnicamente UDP), un protocolo no confiable, en la capa de red_
+
+### Construyendo un protocolo de transferencia de datos confiable
+
+Construyamos el caso más simple posible:
+
+- El lado que envía simplemente acepta datos desde la capa de más arriba vía rdt_send(data), enviando el paquete dentro del canal
+- En el lado que recibe, mediante el canal obtenemos el paquete via rdt_rcv(packet), moviendo los datos a la capa superior
+
+_Este es un protocolo simple, no hay diferencia entre una unidad de datos y un paquete. Tambien, todos los paquetes se mueven de manera unidirecional (origen -> destino), por lo cual no hay necesidad de feedback, suponiendo que no hat errores o congestión_
+
+#### Envio con bit de error
+
+Dando más realismo al modelo anterior, supongamos que los paquetes pueden corromperse en el trayecto (dado la naturaleza física de la trasnmisión de los paquetes). Para esto necesitaremos desarrollar mensajes de control para que desde el origen haya conocimiento de el estado de la comunicación y los paquetes enviados
+
+Para esto nos basaremos en el protocolo ARQ (**Automatic Repeat reQuest**), el cual nos pide tres capacidades en nuestro modelo:
+
+1.- **Detección de errores**: esta debe ser capaz de detectar y posiblemente corregir bit de error en los paquetes (por ahora sabemos que necesitamos bits extras para estas funcinalidades en nuestra cabecera, similar a)
+
+2.- **Feedback del destino**: Dado que el envío de datos es usualmente dirigido a otro end system, la forma de saber el resultado de la operación es mediante un feedback explícito de la máquina que recibió o estaba dirigida el mensaje. Para esto usaremos como feedback positivo **ACK** y como feedback negativo **NAK**
+
+3.- **Retransmisión**: Un paquete el cual a sido recibido con errores será retransmitido por el origen
+
+El funcionamiento integrando el protocolo ARQ sería el siguiente:
+
+- Se hace el envío del paquete con un checksum (similar a UDP) y esperamos respuesta del otro lado de la conexión (esperamos por un ACK o NAK por parte del destino)
+- 
