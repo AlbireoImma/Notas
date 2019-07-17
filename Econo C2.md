@@ -22,3 +22,48 @@ Los costos de producción pueden interpretarse como todos los **costos de oportu
 
 **Costos Totales (CT)**: Valor de mercado de los insumos necesarios en la producción por parte de la empresa
 
+**Beneficios (π)**: Valor obtenido con la sustracción de ingresos totales y los costos totales
+
+`π = IT - CT`
+
+**Beneficio Económico**: Depende del encargado de hacer el estimado cuales serán los indicadores a utilizar:
+- Economista: Ingresos totales menos costos totales, incluyendo todos los costos de oportunidad (explícitos e implícitos)
+- Contador: Ingresos totales menoos los costos totales que incluyen únicamente los costos de oportunidad explícitos
+
+### Decisión de Producción de la Empresa
+
+Estas se derivan del comportamiento de los consumidores, estas siguen tres pasos:
+
+- Tecnología de producción: Transforman los factores de producción (materias, trabajo, capital) en productos
+- Restricción de costos: Relación entre los precios de los factores de producción y el capital que la empresa tiene
+- Elección de factores: Dada una tecnología y precios de los factores, la empresa decie la cantidad que va a utilizar de cada factor para producir los productos
+
+### Función de Producción
+
+Corresponde a la relación que existe entre la cantidad de factores de producción utilizados para producir un bien y la cantidad producida de dicho bien
+
+Nos muestra el nivel de producción máximo que puede obtener la empresa con cada combinación de factores de producción
+
+Esta determinada por el capital (K) y el trabajo (L)
+
+`q = f(K,L)`
+
+#### Análisis de la función
+
+**Corto Plazo**: Tiempo en el que no es posible alterar las cantidades de uno o más factores de producción, ergo, al menos un factor de producción es constante (**Factor fijo**)
+
+**Largo Plazo**: Tiempo necesario para que todos los factores de producción sean variables
+
+#### Producto Marginal
+
+Es el incremento en la cantidad de producción que se obtiene por cada unidad adicional de ese factor de producción para ualquier factor de producción
+
+Por ejemplo, considerando el producto marginal del trabajo (L):
+
+`PM_L = q'/L'`
+
+### Factores de Producción
+
+- Trabajo: Trabajadores calificados (profesiones) y no calificados (oficios)
+- Materias Primas: Bienes que la empresa compra y transforma en productos finales
+- Capital: Suelo (bien raíz), edificios, maquinaria y demás equipo (inventario)
