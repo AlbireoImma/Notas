@@ -142,6 +142,8 @@ _Notar que una capa puede ser confiable en el envío de datos pero otras no nece
 
 ### Construyendo un protocolo de transferencia de datos confiable
 
+#### Caso inicial
+
 Construyamos el caso más simple posible:
 
 - El lado que envía simplemente acepta datos desde la capa de más arriba vía rdt_send(data), enviando el paquete dentro del canal
@@ -164,4 +166,23 @@ Para esto nos basaremos en el protocolo ARQ (**Automatic Repeat reQuest**), el c
 El funcionamiento integrando el protocolo ARQ sería el siguiente:
 
 - Se hace el envío del paquete con un checksum (similar a UDP) y esperamos respuesta del otro lado de la conexión (esperamos por un ACK o NAK por parte del destino)
-- 
+- Si recibimos un ACK, el paquete ha sido exitosamente enviado y esperamos por futuros paquetes desde la capa superior
+- Si recibimos un NAK, volvemos a enviar el paquete y volvemos a esperar por un ACK o NAK desde el destino
+
+_Notar que si recibimos un NAK no podemos recibir datos para enviar desde la capa superior puesto que estamos esperando una respuesta sea ACK o NAK, esre tipo de protocolos son conocidos como **stop-and-wait**. Además notar que este protocolo como esta declarado tiene un error el cual no incluye que el paquete de feedback (ACK o NAK) pueda estar corrupto_
+
+Para resolver el problema de feedback corrupto tenemos un par de formas:
+
+- Responder devuelta que fue lo que dijo el destino (agregando otro tipo de paquete a nuestro protocolo), este enfoque contiene el mismo problema el cual queremos resolver (u.u) que sucede si el paquete que enviamos se corrompe estariamos dando vueltas en círculos
+- Lo que podriamos hacer es tener un checksum mas complejo que no solo sea capaz de saber si hay un error, pero también recuperar la información que se ha corrompido directamente en el destino
+- Otro enfoque sería que el origen volviera a enviar el paquete que recibió una respuesta corrompida. Pero esto tiene dos problemas, generaríamos paquetes duplicados, pero aún más problemástico es que el destino no sabe cual feedback fue el último recibido correctamente por el origen, ergo, no sabe a priori cuando un paquete contiene datos nuevos o una retransmisión
+
+Una solución simple a este problema (adoptado por los protocolos actuales, TCP incluido) es añadir un nuevo campo al paquete y hacer que origen enumere los paquete mediante **un número de sequencia** en el campo creado
+
+#### Envio con posibilidad de perder paquetes
+
+### Pipeline vs stop-and-wait
+
+#### Go-Back-N
+
+#### Selective repeat
